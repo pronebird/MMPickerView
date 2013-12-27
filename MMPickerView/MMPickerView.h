@@ -32,6 +32,6 @@ extern NSString * const MMshowsSelectionIndicator;
 	objectToStringConverter: (NSString *(^)(id object))converter
 	   completion: (void(^)(id selectedObject))completion;
 
-+(void)dismissWithCompletion: (void(^)(NSString *))completion;
++(void)dismissWithCompletion: (void(^)(id selectedObject))completion;
 
 @end

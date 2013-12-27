@@ -57,13 +57,11 @@ NSString * const MMshowsSelectionIndicator = @"showsSelectionIndicator";
 #pragma mark - Show Methods
 
 +(void)showPickerViewInView:(UIView *)view
-								withStrings:(NSArray *)strings
-								withOptions:(NSDictionary *)options
-								 completion:(void (^)(NSString *))completion{
+				withStrings:(NSArray *)strings
+				withOptions:(NSDictionary *)options
+				 completion:(void (^)(NSString *))completion{
 	
-	[[self sharedView] initializePickerViewInView:view
-																			withArray:strings
-																		withOptions:options];
+	[[self sharedView] initializePickerViewInView:view withArray:strings withOptions:options];
 	
 	[[self sharedView] setPickerHidden:NO callBack:nil];
 	[self sharedView].onDismissCompletion = completion;
@@ -72,16 +70,14 @@ NSString * const MMshowsSelectionIndicator = @"showsSelectionIndicator";
 }
 
 +(void)showPickerViewInView:(UIView *)view
-								withObjects:(NSArray *)objects
-								withOptions:(NSDictionary *)options
-		objectToStringConverter:(NSString *(^)(id))converter
-								 completion:(void (^)(id))completion {
+				withObjects:(NSArray *)objects
+				withOptions:(NSDictionary *)options
+	objectToStringConverter:(NSString *(^)(id))converter
+				 completion:(void (^)(id))completion {
 	
 	[self sharedView].objectToStringConverter = converter;
 	[self sharedView].onDismissCompletion = completion;
-	[[self sharedView] initializePickerViewInView:view
-																			withArray:objects
-																		withOptions:options];
+	[[self sharedView] initializePickerViewInView:view withArray:objects withOptions:options];
 	[[self sharedView] setPickerHidden:NO callBack:nil];
 	[view addSubview:[self sharedView]];
 	
@@ -89,12 +85,12 @@ NSString * const MMshowsSelectionIndicator = @"showsSelectionIndicator";
 
 #pragma mark - Dismiss Methods
 
-+(void)dismissWithCompletion:(void (^)(NSString *))completion{
++(void)dismissWithCompletion:(void (^)(id selectedObject))completion{
 	[[self sharedView] setPickerHidden:YES callBack:completion];
 }
 
 -(void)dismiss{
- [MMPickerView dismissWithCompletion:self.onDismissCompletion];
+	[MMPickerView dismissWithCompletion:self.onDismissCompletion];
 }
 
 +(void)removePickerView{
@@ -103,24 +99,23 @@ NSString * const MMshowsSelectionIndicator = @"showsSelectionIndicator";
 
 #pragma mark - Show/hide PickerView methods
 
--(void)setPickerHidden: (BOOL)hidden callBack: (void(^)(NSString *))callBack; {
-	[UIView animateWithDuration:0.3
-												delay:0.0
-											options:UIViewAnimationOptionCurveEaseOut
-									 animations:^{
-										 if (hidden) {
-											 [_pickerViewContainerView setAlpha:0.0];
-											 [_pickerContainerView setTransform:CGAffineTransformMakeTranslation(0.0, CGRectGetHeight(_pickerContainerView.frame))];
-										 } else {
-											 [_pickerViewContainerView setAlpha:1.0];
-											 [_pickerContainerView setTransform:CGAffineTransformIdentity];
-										 }
-									 } completion:^(BOOL completed) {
-										 if(completed && hidden){
-											 [MMPickerView removePickerView];
-											 callBack([self selectedObject]);
-										 }
-									 }];
+-(void)setPickerHidden: (BOOL)hidden callBack: (void(^)(id))callBack; {
+	[UIView animateWithDuration:0.3 delay:0.0
+						options:UIViewAnimationOptionCurveEaseOut
+					 animations:^{
+						 if(hidden) {
+							 [_pickerViewContainerView setAlpha:0.0];
+							 [_pickerContainerView setTransform:CGAffineTransformMakeTranslation(0.0, CGRectGetHeight(_pickerContainerView.frame))];
+						 } else {
+							 [_pickerViewContainerView setAlpha:1.0];
+							 [_pickerContainerView setTransform:CGAffineTransformIdentity];
+						 }
+					 } completion:^(BOOL completed) {
+						 if(completed && hidden){
+							 [MMPickerView removePickerView];
+							 callBack([self selectedObject]);
+						 }
+					 }];
 	
 }
 
@@ -172,38 +167,38 @@ NSString * const MMshowsSelectionIndicator = @"showsSelectionIndicator";
 	
 	//PickerView Container with top bar
 	_pickerContainerView = [[UIView alloc] initWithFrame:CGRectMake(0.0, _pickerViewContainerView.bounds.size.height - 260.0, 320.0, 260.0)];
-		
+	
 	//Default Color Values (if colors == nil)
 	
 	//PickerViewBackgroundColor - White
-	if (pickerViewBackgroundColor==nil) {
+	if(pickerViewBackgroundColor==nil) {
 		pickerViewBackgroundColor = [UIColor whiteColor];
 	}
 	
 	//PickerViewTextColor - Black
-	if (pickerViewTextColor==nil) {
+	if(pickerViewTextColor==nil) {
 		pickerViewTextColor = [UIColor blackColor];
 	}
 	_pickerViewTextColor = pickerViewTextColor;
 	
 	//ToolbarBackgroundColor - Black
-	if (toolbarBackgroundColor==nil) {
+	if(toolbarBackgroundColor==nil) {
 		toolbarBackgroundColor = [UIColor colorWithRed:0.969 green:0.969 blue:0.969 alpha:0.8];
 	}
 	
 	//ButtonTextColor - Blue
-	if (buttonTextColor==nil) {
+	if(buttonTextColor==nil) {
 		buttonTextColor = [UIColor colorWithRed:0.000 green:0.486 blue:0.976 alpha:1];
 	}
 	
-	if (pickerViewFont==nil) {
+	if(pickerViewFont==nil) {
 		_pickerViewFont = [UIFont systemFontOfSize:22];
 	}
 	_pickerViewFont = pickerViewFont;
 	
 	/*
 	 //ToolbackBackgroundImage - Clear Color
-	 if (toolbarBackgroundImage!=nil) {
+	 if(toolbarBackgroundImage!=nil) {
 	 //Top bar imageView
 	 _pickerTopBarImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0, 0.0, _pickerContainerView.frame.size.width, 44.0)];
 	 //[_pickerContainerView addSubview:_pickerTopBarImageView];
@@ -224,27 +219,23 @@ NSString * const MMshowsSelectionIndicator = @"showsSelectionIndicator";
 	[_pickerContainerView addSubview:_pickerTopBarView];
 	[_pickerTopBarView setBackgroundColor:[UIColor whiteColor]];
 	
-	
 	_pickerViewToolBar = [[UIToolbar alloc] initWithFrame:_pickerTopBarView.frame];
 	[_pickerContainerView addSubview:_pickerViewToolBar];
 	
-	CGFloat iOSVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
-	//NSLog(@"%f",iOSVersion);
-	
-	if (iOSVersion < 7.0) {
+	if([[[UIDevice currentDevice] systemVersion] integerValue] < 7) {
 		_pickerViewToolBar.tintColor = toolbarBackgroundColor;
 		//[_pickerViewToolBar setBackgroundColor:toolbarBackgroundColor];
-	}else{
-		 [_pickerViewToolBar setBackgroundColor:toolbarBackgroundColor];
-
-		 //_pickerViewToolBar.tintColor = toolbarBackgroundColor;
-	
-		#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 70000
+	} else {
+		[_pickerViewToolBar setBackgroundColor:toolbarBackgroundColor];
+		
+		//_pickerViewToolBar.tintColor = toolbarBackgroundColor;
+		
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 70000
 		_pickerViewToolBar.barTintColor = toolbarBackgroundColor;
-		#endif
+#endif
 	}
 	
-	if (toolbarImage!=nil) {
+	if(toolbarImage!=nil) {
 		[_pickerViewToolBar setBackgroundImage:toolbarImage forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
 	}
 	
@@ -261,7 +252,7 @@ NSString * const MMshowsSelectionIndicator = @"showsSelectionIndicator";
 	 [_pickerDoneButton setTitle:@"Done" forState:UIControlStateNormal];
 	 [_pickerContainerView addSubview:_pickerDoneButton];
 	 [_pickerDoneButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
-	*/
+	 */
 	
 	//Add pickerView
 	_pickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(0.0, 44.0, 320.0, 216.0)];
@@ -287,23 +278,21 @@ NSString * const MMshowsSelectionIndicator = @"showsSelectionIndicator";
 	return [_pickerViewArray count];
 }
 
-- (NSString *)pickerView: (UIPickerView *)pickerView
-						 titleForRow: (NSInteger)row
-						forComponent: (NSInteger)component {
-	if (self.objectToStringConverter == nil){
+- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
+	if(self.objectToStringConverter == nil) {
 		return [_pickerViewArray objectAtIndex:row];
-	} else{
-		return (self.objectToStringConverter ([_pickerViewArray objectAtIndex:row]));
+	} else {
+		return self.objectToStringConverter([_pickerViewArray objectAtIndex:row]);
 	}
 }
 
 #pragma mark - UIPickerViewDelegate
 
 -(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
-	if (self.objectToStringConverter == nil) {
+	if(self.objectToStringConverter == nil) {
 		self.onDismissCompletion ([_pickerViewArray objectAtIndex:row]);
 	} else{
-		self.onDismissCompletion (self.objectToStringConverter ([self selectedObject]));
+		self.onDismissCompletion ([self selectedObject]);
 	}
 }
 
@@ -311,25 +300,19 @@ NSString * const MMshowsSelectionIndicator = @"showsSelectionIndicator";
 	return [_pickerViewArray objectAtIndex: [self.pickerView selectedRowInComponent:0]];
 }
 
-- (UIView *)pickerView:(UIPickerView *)pickerView
-						viewForRow:(NSInteger)row
-					forComponent:(NSInteger)component
-					 reusingView:(UIView *)view {
-	
+- (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view {
 	UIView *customPickerView = view;
-	
 	UILabel *pickerViewLabel;
 	
-	if (customPickerView==nil) {
-		
+	if(customPickerView == nil) {
 		CGRect frame = CGRectMake(0.0, 0.0, 292.0, 44.0);
 		customPickerView = [[UIView alloc] initWithFrame: frame];
 		
-//   UIImageView *patternImageView = [[UIImageView alloc] initWithFrame:frame];
-//   patternImageView.image = [[UIImage imageNamed:@"texture"] resizableImageWithCapInsets:UIEdgeInsetsZero];
-//    [customPickerView addSubview:patternImageView];
+		//   UIImageView *patternImageView = [[UIImageView alloc] initWithFrame:frame];
+		//   patternImageView.image = [[UIImage imageNamed:@"texture"] resizableImageWithCapInsets:UIEdgeInsetsZero];
+		//    [customPickerView addSubview:patternImageView];
 		
-		if (_yValueFromTop == 0.0f) {
+		if(_yValueFromTop == 0.0f) {
 			_yValueFromTop = 3.0;
 		}
 		
@@ -341,24 +324,22 @@ NSString * const MMshowsSelectionIndicator = @"showsSelectionIndicator";
 		[pickerViewLabel setTextColor:_pickerViewTextColor];
 		[pickerViewLabel setFont:_pickerViewFont];
 		[customPickerView addSubview:pickerViewLabel];
-	} else{
-		
-		for (UIView *view in customPickerView.subviews) {
-			if (view.tag == 1) {
+	} else {
+		for(UIView *view in customPickerView.subviews) {
+			if(view.tag == 1) {
 				pickerViewLabel = (UILabel *)view;
 				break;
 			}
 		}
 	}
 	
-	if (self.objectToStringConverter == nil){
+	if(self.objectToStringConverter == nil) {
 		[pickerViewLabel setText: [_pickerViewArray objectAtIndex:row]];
-	} else{
+	} else {
 		[pickerViewLabel setText:(self.objectToStringConverter ([_pickerViewArray objectAtIndex:row]))];
 	}
 	
 	return customPickerView;
-
 }
 
 
