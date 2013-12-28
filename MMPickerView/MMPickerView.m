@@ -131,13 +131,10 @@ NSString * const MMshowsSelectionIndicator = @"showsSelectionIndicator";
 		selectedRow = [_pickerViewArray indexOfObject:chosenObject];
 	}
 	
-	NSNumber *textAlignment = [[NSNumber alloc] init];
-	textAlignment = options[MMtextAlignment];
-	//Default value is NSTextAlignmentCenter
-	_pickerViewTextAlignment = NSTextAlignmentCenter;
-	
-	if(textAlignment != nil) {
+	if(options[MMtextAlignment] != nil) {
 		_pickerViewTextAlignment = [options[MMtextAlignment] integerValue];
+	} else {
+		_pickerViewTextAlignment = NSTextAlignmentCenter;
 	}
 	
 	BOOL showSelectionIndicator = [options[MMshowsSelectionIndicator] boolValue];
